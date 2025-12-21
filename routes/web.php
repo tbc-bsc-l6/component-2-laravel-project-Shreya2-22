@@ -12,7 +12,9 @@ Route::get('/login', Login::class)->name('login');
 
 Route::get('/register', Register::class)->name('register');
 
+use Illuminate\Support\Facades\Auth;
+
 Route::post('/logout', function () {
-    Auth()->logout();
+    Auth::logout();
     return redirect('/login');
 })->name('logout');
