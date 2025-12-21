@@ -16,6 +16,8 @@ class Login extends Component
         'password' => 'required',
     ];
 
+    protected $layout = 'components.layouts.app'; // Add this property to set the layout
+
     public function login()
     {
         $this->validate();
@@ -29,6 +31,6 @@ class Login extends Component
 
     public function render()
     {
-        return view('livewire.auth.login');
+        return view('livewire.auth.login'); // Remove ->layout() call
     }
 }

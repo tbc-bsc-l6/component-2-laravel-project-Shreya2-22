@@ -8,6 +8,8 @@ use Livewire\Component;
 
 class Register extends Component
 {
+    protected $layout = 'components.layouts.app';
+
     public $name;
     public $email;
     public $password;
