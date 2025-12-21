@@ -1,0 +1,1 @@
+<?php /**PATH C:\xampp\htdocs\component-2-laravel-project-Shreya2-22\resources\views/components/layouts/app.blade.php ENDPATH**/ ?>
