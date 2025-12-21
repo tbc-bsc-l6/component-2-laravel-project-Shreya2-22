@@ -9,4 +9,10 @@ Route::get('/', function () {
 });
 
 Route::get('/login', Login::class)->name('login');
+
 Route::get('/register', Register::class)->name('register');
+
+Route::post('/logout', function () {
+    Auth()->logout();
+    return redirect('/login');
+})->name('logout');
