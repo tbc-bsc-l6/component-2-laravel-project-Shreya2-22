@@ -10,6 +10,15 @@ class RegisterTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        \App\Models\UserRole::create(['id' => 1, 'name' => 'Admin']);
+        \App\Models\UserRole::create(['id' => 2, 'name' => 'Teacher']);
+        \App\Models\UserRole::create(['id' => 3, 'name' => 'Student']);
+        \App\Models\UserRole::create(['id' => 4, 'name' => 'Old Student']);
+    }
+
     public function test_user_can_register()
     {
         Livewire::test(\App\Livewire\Auth\Register::class)
