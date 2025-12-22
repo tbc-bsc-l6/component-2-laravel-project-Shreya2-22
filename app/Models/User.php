@@ -64,4 +64,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Course::class, 'enrollments')->withPivot('enrollment_date', 'pass_fail', 'completion_date');
     }
+
+    public function taughtCourses()
+    {
+        return $this->hasMany(Course::class, 'teacher_id');
+    }
+    
 }
