@@ -6,15 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Enrollment extends Model
 {
-    protected $fillable = ['user_id', 'course_id', 'enrollment_date', 'pass_fail', 'completion_date'];
+    protected $fillable = ['user_id', 'module_id', 'enrolled_at', 'status', 'grade', 'completed_at'];
+
+    protected $casts = [
+        'enrolled_at' => 'datetime',
+        'completed_at' => 'datetime',
+    ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    public function course()
+    public function module()
     {
-        return $this->belongsTo(Course::class);
+        return $this->belongsTo(Module::class);
     }
 }

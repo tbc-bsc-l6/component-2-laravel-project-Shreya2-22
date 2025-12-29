@@ -6,9 +6,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Models\Enrollment;
-use App\Models\UserRole;
-use App\Models\Course;
 
 class User extends Authenticatable
 {
@@ -24,7 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'user_role_id',
+        'user_role_id'
     ];
 
     /**
@@ -49,10 +46,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    
-    public function role()
+    /**
+     * Get the user role for the user.
+     */
+    public function userRole()
     {
-        return $this->belongsTo(UserRole::class, 'user_role_id');
+        return $this->belongsTo(UserRole::class);
     }
 
     public function enrollments()
@@ -60,14 +59,8 @@ class User extends Authenticatable
         return $this->hasMany(Enrollment::class);
     }
 
-    public function courses()
+    public function modules()
     {
-        return $this->belongsToMany(Course::class, 'enrollments')->withPivot('enrollment_date', 'pass_fail', 'completion_date');
+        return $this->belongsToMany(Module::class, 'enrollments')->withPivot('status', 'grade', 'enrolled_at', 'completed_at');
     }
-
-    public function taughtCourses()
-    {
-        return $this->hasMany(Course::class, 'teacher_id');
-    }
-    
 }

@@ -2,29 +2,24 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-use App\Livewire\Auth\Login;
-use App\Livewire\Auth\Register;
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-Route::get('/login', Login::class)->name('login');
+use App\Livewire\RegisterUser;
+use App\Livewire\LoginUser;
+use App\Livewire\SplashPage;
 
-Route::get('/register', Register::class)->name('register');
+Route::get('/', SplashPage::class)->name('splash');
+
+Route::get('/register', RegisterUser::class)->name('register');
+Route::get('/login', LoginUser::class)->name('login');
+
+use App\Livewire\AdminDashboard;
+Route::get('/admin', AdminDashboard::class)->middleware('role:admin')->name('admin');
 
 Route::post('/logout', function () {
-    Auth::logout();
-    return redirect('/login');
+	Auth::logout();
+	request()->session()->invalidate();
+	request()->session()->regenerateToken();
+	return redirect('/');
 })->name('logout');
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware('auth')->name('dashboard');
-
-Route::middleware('admin')->group(function () {
-    Route::get('/admin', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
-});
 
