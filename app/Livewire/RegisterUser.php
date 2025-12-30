@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;  // Add this import
 
 class RegisterUser extends Component
 {
@@ -19,7 +20,6 @@ class RegisterUser extends Component
             'password' => 'required|min:6|confirmed',
         ]);
 
-
         $user = \App\Models\User::create([
             'name' => $this->name,
             'email' => $this->email,
@@ -27,7 +27,7 @@ class RegisterUser extends Component
             'user_role_id' => \App\Models\UserRole::where('role', 'student')->value('id'),
         ]);
 
-        auth()->login($user);
+        Auth::login($user);  // Change to Auth::login($user)
         session()->flash('message', 'User registered successfully!');
         return redirect()->route('splash');
     }

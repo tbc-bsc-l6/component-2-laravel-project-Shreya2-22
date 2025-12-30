@@ -1,5 +1,6 @@
 <?php
 namespace App\Livewire;
+
 use Livewire\Component;
 use App\Models\Module;
 use App\Models\User;
@@ -33,16 +34,17 @@ class AdminDashboard extends Component {
         $module = Module::find($id);
         $module->update(['active' => !$module->active]);
         $this->loadData();
+        session()->flash('message', 'Module status updated!');
     }
 
-    // Change a user's role (e.g., to teacher or student)
+    // Change a user's role
     public function changeRole($userId, $roleId) {
         User::find($userId)->update(['user_role_id' => $roleId]);
         $this->loadData();
         session()->flash('message', 'User role updated!');
     }
 
-    // Remove a student from a module (delete enrollment)
+    // Remove a student from a module
     public function removeStudentFromModule($enrollmentId) {
         Enrollment::find($enrollmentId)->delete();
         $this->loadData();
@@ -52,9 +54,13 @@ class AdminDashboard extends Component {
     // Attach a teacher to a module
     public function attachTeacher($moduleId, $teacherId) {
         $module = Module::find($moduleId);
-        $module->teachers()->attach($teacherId);
-        $this->loadData();
-        session()->flash('message', 'Teacher attached to module!');
+        if (!$module->teachers()->where('user_id', $teacherId)->exists()) {
+            $module->teachers()->attach($teacherId);
+            $this->loadData();
+            session()->flash('message', 'Teacher attached to module!');
+        } else {
+            session()->flash('message', 'Teacher already attached!');
+        }
     }
 
     // Detach a teacher from a module
@@ -65,7 +71,22 @@ class AdminDashboard extends Component {
         session()->flash('message', 'Teacher detached from module!');
     }
 
+    // Attach teacher to module via form
+    public function attachTeacherForm() {
+        $this->validate(['selectedTeacher' => 'required', 'selectedModule' => 'required']);
+        $module = Module::find($this->selectedModule);
+        if (!$module->teachers()->where('user_id', $this->selectedTeacher)->exists()) {
+            $module->teachers()->attach($this->selectedTeacher);
+            $this->loadData();
+            session()->flash('message', 'Teacher attached to module successfully!');
+        } else {
+            session()->flash('message', 'Teacher already attached to this module!');
+        }
+    }
+
     public function render() {
-        return view('livewire.admin-dashboard');
+        $roles = UserRole::all();
+        $teachers = User::whereHas('userRole', fn($q) => $q->where('role', 'teacher'))->get();
+        return view('livewire.admin-dashboard', compact('roles', 'teachers'));
     }
 }
