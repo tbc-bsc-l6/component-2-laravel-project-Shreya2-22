@@ -4,7 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Module;
-use Illuminate\Support\Facades\Auth; // Add this import
+use Illuminate\Support\Facades\Auth; 
 
 class TeacherDashboard extends Component
 {
@@ -13,7 +13,7 @@ class TeacherDashboard extends Component
     public function mount()
     {
         // Load modules assigned to the current teacher
-        $this->assignedModules = Auth::user()->modules; // Change to Auth::user()
+        $this->assignedModules = Auth::user()->taughtModules;
     }
 
     public function render()
