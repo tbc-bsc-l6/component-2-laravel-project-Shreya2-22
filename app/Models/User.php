@@ -63,4 +63,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Module::class, 'enrollments')->withPivot('status', 'grade', 'enrolled_at', 'completed_at');
     }
+
+    public function taughtModules()
+    {
+        return $this-> belongsToMany(Module::class, 'module_teachers');
+    }
 }

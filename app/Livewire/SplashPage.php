@@ -13,6 +13,8 @@ class SplashPage extends Component
             $role = Auth::user()->userRole->role;
             if ($role === 'admin') {
                 return redirect('/admin');
+            } elseif ($role === 'teacher') {
+                return redirect('/teacher'); // Add this for teachers
             }
             // Add redirects for other roles here as needed
         }
