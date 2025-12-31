@@ -9,6 +9,7 @@ use App\Livewire\LoginUser;
 use App\Livewire\SplashPage;
 use App\Livewire\AdminDashboard;
 use App\Livewire\TeacherDashboard;
+use App\Livewire\StudentDashboard;
 
 Route::get('/', SplashPage::class)->name('splash');
 
@@ -26,4 +27,6 @@ Route::post('/logout', function () {
 })->name('logout');
 
 Route::get('/teacher', TeacherDashboard::class)->middleware('role:teacher')->name('teacher');
+
+Route::get('/teacher', StudentDashboard::class)->middleware('role:student')->name('student');
 

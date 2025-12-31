@@ -14,9 +14,12 @@ class SplashPage extends Component
             if ($role === 'admin') {
                 return redirect('/admin');
             } elseif ($role === 'teacher') {
-                return redirect('/teacher'); // Add this for teachers
+                return redirect('/teacher'); 
             }
-            // Add redirects for other roles here as needed
+            elseif ($role === 'student' || $role === 'old_student') {
+                return redirect('/student'); // Add this for students
+            }
+            
         }
     }
 
