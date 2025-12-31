@@ -28,5 +28,5 @@ Route::post('/logout', function () {
 
 Route::get('/teacher', TeacherDashboard::class)->middleware('role:teacher')->name('teacher');
 
-Route::get('/teacher', StudentDashboard::class)->middleware('role:student')->name('student');
+Route::get('/student', StudentDashboard::class)->middleware('role:student')->name('student');
 
