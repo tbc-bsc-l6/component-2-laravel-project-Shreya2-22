@@ -188,6 +188,7 @@
                         <tr>
                             <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Teacher Name</th>
                             <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Email</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Assigned Modules</th>
                             <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Actions</th>
                         </tr>
                     </thead>
@@ -196,6 +197,9 @@
                             <tr class="border-t border-gray-200 hover:bg-gray-50">
                                 <td class="px-6 py-4 text-sm text-gray-900">{{ $teacher->name }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-700">{{ $teacher->email }}</td>
+                                <td class="px-6 py-4 text-sm text-gray-700">
+                                    {{ $teacher->taughtModules->pluck('module')->join(', ') ?: 'None' }}
+                                </td>
                                 <td class="px-6 py-4">
                                     <button wire:click="changeRole({{ $teacher->id }}, 3)" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition">Remove as Teacher</button>
                                 </td>

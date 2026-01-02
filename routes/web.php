@@ -30,5 +30,3 @@ Route::get('/teacher', TeacherDashboard::class)->middleware('role:teacher')->nam
 
 Route::get('/student', StudentDashboard::class)->middleware('role:student,old_student')->name('student');
 
-Route::get('/student', StudentDashboard::class)->middleware('role:student')->name('student');
-
