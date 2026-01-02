@@ -9,7 +9,7 @@
         @endif
 
         <!-- Section: Assigned Modules -->
-        <div class="bg-white shadow-xl rounded-xl p-8 border border-gray-200">
+        <div class="bg-white shadow-xl rounded-xl p-8 mb-10 border border-gray-200">
             <h2 class="text-3xl font-semibold text-gray-800 mb-6 flex items-center">
                 <svg class="w-8 h-8 mr-3 text-green-600" fill="currentColor" viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 My Assigned Modules
@@ -24,7 +24,7 @@
                             <tr>
                                 <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Module Name</th>
                                 <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Status</th>
-                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Actions</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Enrolled Students</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -36,9 +36,8 @@
                                             {{ $module->active ? 'Active' : 'Inactive' }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 text-sm">
-                                        <!-- Placeholder for future actions like viewing students -->
-                                        <button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition">View Students</button>
+                                    <td class="px-6 py-4 text-sm text-gray-700">
+                                        {{ $module->enrollments()->where('status', 'enrolled')->count() }}/10 students
                                     </td>
                                 </tr>
                             @endforeach

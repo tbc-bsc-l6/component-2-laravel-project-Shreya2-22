@@ -17,12 +17,13 @@ class StudentDashboard extends Component
         $this->enrollments = $user->enrollments()->where('status', 'enrolled')->get(); // Current enrollments
         $this->completedEnrollments = $user->enrollments()->where('status', 'completed')->get(); // Completed history
         // Only show active modules with less than 10 enrolled students, not already enrolled by user
+        $enrolledModuleIds = $user->enrollments()->pluck('module_id')->toArray();
         $this->availableModules = Module::where('active', true)
-            ->whereDoesntHave('enrollments', function ($query) {
-                $query->where('status', 'enrolled')->havingRaw('COUNT(*) >= 10');
-            })
-            ->whereNotIn('id', $user->enrollments()->pluck('module_id'))
-            ->get();
+            ->whereNotIn('id', $enrolledModuleIds)
+            ->get()
+            ->filter(function ($module) {
+                return $module->enrollments()->where('status', 'enrolled')->count() < 10;
+            });
     }
 
     public function enroll($moduleId)
