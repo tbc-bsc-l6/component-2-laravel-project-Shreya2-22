@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EduTrack - Educational Administration System</title>
+    <link rel="icon" type="image/svg+xml" href="{{ asset('images/edutrack-logo.svg') }}">
+    <link rel="shortcut icon" type="image/svg+xml" href="{{ asset('images/edutrack-logo.svg') }}">
     @vite('resources/css/app.css')
     @livewireStyles
     @fluxAppearance
