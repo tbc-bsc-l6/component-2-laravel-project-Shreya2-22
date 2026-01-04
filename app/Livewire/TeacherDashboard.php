@@ -3,37 +3,27 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Livewire\WithPagination;
 use App\Models\Module;
 use App\Models\Enrollment;
 use Illuminate\Support\Facades\Auth; 
 
 class TeacherDashboard extends Component
 {
-    public $assignedModules, $selectedModule, $studentsInModule;
+    use WithPagination;
+
+    public $assignedModules, $selectedModule;
 
     public function mount()
     {
         // Load modules assigned to the current teacher
         $this->assignedModules = Auth::user()->taughtModules;
         $this->selectedModule = $this->assignedModules->first()?->id; // Default to first module
-        $this->loadStudents();
-    }
-
-    public function loadStudents()
-    {
-        if ($this->selectedModule) {
-            $this->studentsInModule = Enrollment::where('module_id', $this->selectedModule)
-                ->where('status', 'enrolled')
-                ->with('user')
-                ->get();
-        } else {
-            $this->studentsInModule = collect();
-        }
     }
 
     public function updatedSelectedModule()
     {
-        $this->loadStudents();
+        $this->resetPage('studentsPage');
     }
 
     public function gradeStudent($enrollmentId, $grade)
@@ -44,12 +34,20 @@ class TeacherDashboard extends Component
             'grade' => $grade,
             'completed_at' => now(),
         ]);
-        $this->loadStudents(); // Refresh students list
         session()->flash('message', 'Student graded successfully!');
     }
 
     public function render()
     {
-        return view('livewire.teacher-dashboard');
+        $studentsInModule = collect();
+        
+        if ($this->selectedModule) {
+            $studentsInModule = Enrollment::where('module_id', $this->selectedModule)
+                ->where('status', 'enrolled')
+                ->with('user')
+                ->paginate(10, ['*'], 'studentsPage');
+        }
+        
+        return view('livewire.teacher-dashboard', compact('studentsInModule'));
     }
 }

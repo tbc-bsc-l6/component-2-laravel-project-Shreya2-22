@@ -2,22 +2,37 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Livewire\WithPagination;
 use App\Models\Module;
 use App\Models\User;
 use App\Models\UserRole;
 use App\Models\Enrollment;
 
 class AdminDashboard extends Component {
-    public $modules, $users, $enrollments, $newModule = '', $selectedUser, $newRole, $selectedModule, $selectedTeacher;
+    use WithPagination;
+
+    public $newModule = '', $selectedUser, $newRole, $selectedModule, $selectedTeacher;
+    public $searchModules = '', $searchUsers = '', $searchEnrollments = '';
+
+    // Reset pagination when search changes
+    public function updatedSearchModules() {
+        $this->resetPage('modulesPage');
+    }
+
+    public function updatedSearchUsers() {
+        $this->resetPage('usersPage');
+    }
+
+    public function updatedSearchEnrollments() {
+        $this->resetPage('enrollmentsPage');
+    }
 
     public function mount() {
-        $this->loadData();
+        // No longer preloading data
     }
 
     public function loadData() {
-        $this->modules = Module::with('teachers')->get();
-        $this->users = User::with('userRole')->get();
-        $this->enrollments = Enrollment::with('user', 'module')->get();
+        // Kept for compatibility with flash messages but data is now loaded in render()
     }
 
     // Add a new module
@@ -87,6 +102,29 @@ class AdminDashboard extends Component {
     public function render() {
         $roles = UserRole::all();
         $teachers = User::whereHas('userRole', fn($q) => $q->where('role', 'teacher'))->get();
-        return view('livewire.admin-dashboard', compact('roles', 'teachers'));
+        
+        // Paginated queries with search
+        $modules = Module::with('teachers')
+            ->when($this->searchModules, fn($q) => $q->where('module', 'like', '%' . $this->searchModules . '%'))
+            ->paginate(5, ['*'], 'modulesPage');
+        
+        $users = User::with('userRole')
+            ->when($this->searchUsers, fn($q) => $q->where('name', 'like', '%' . $this->searchUsers . '%')
+                ->orWhere('email', 'like', '%' . $this->searchUsers . '%'))
+            ->paginate(10, ['*'], 'usersPage');
+        
+        $enrollments = Enrollment::with('user', 'module')
+            ->when($this->searchEnrollments, function($q) {
+                $q->whereHas('user', fn($q2) => $q2->where('name', 'like', '%' . $this->searchEnrollments . '%'))
+                  ->orWhereHas('module', fn($q2) => $q2->where('module', 'like', '%' . $this->searchEnrollments . '%'));
+            })
+            ->paginate(10, ['*'], 'enrollmentsPage');
+        
+        // For stats - get all counts
+        $totalModules = Module::count();
+        $totalUsers = User::count();
+        $activeEnrollments = Enrollment::where('status', 'enrolled')->count();
+        
+        return view('livewire.admin-dashboard', compact('roles', 'teachers', 'modules', 'users', 'enrollments', 'totalModules', 'totalUsers', 'activeEnrollments'));
     }
 }

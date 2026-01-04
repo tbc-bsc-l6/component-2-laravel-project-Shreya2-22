@@ -2,28 +2,27 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Livewire\WithPagination;
 use App\Models\Module;
 use App\Models\Enrollment;
 use Illuminate\Support\Facades\Auth;
 
 class StudentDashboard extends Component
 {
-    public $enrollments, $availableModules, $completedEnrollments;
+    use WithPagination;
+
+    public $enrollments;
+    public $searchAvailable = '';
+
+    public function updatedSearchAvailable() {
+        $this->resetPage('availablePage');
+    }
 
     public function mount()
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
         $this->enrollments = $user->enrollments()->where('status', 'enrolled')->get(); // Current enrollments
-        $this->completedEnrollments = $user->enrollments()->where('status', 'completed')->get(); // Completed history
-        // Only show active modules with less than 10 enrolled students, not already enrolled by user
-        $enrolledModuleIds = $user->enrollments()->pluck('module_id')->toArray();
-        $this->availableModules = Module::where('active', true)
-            ->whereNotIn('id', $enrolledModuleIds)
-            ->get()
-            ->filter(function ($module) {
-                return $module->enrollments()->where('status', 'enrolled')->count() < 10;
-            });
     }
 
     public function enroll($moduleId)
@@ -62,13 +61,30 @@ class StudentDashboard extends Component
             'status' => 'enrolled',
             'enrolled_at' => now(),
         ]);
-        $this->mount(); 
+        // Refresh current enrollments
+        $this->enrollments = $user->enrollments()->where('status', 'enrolled')->get();
         session()->flash('message', 'Enrolled successfully!');
     }
 
     public function render()
     {
-        $userRole = Auth::user()->userRole->role; // Access role through the userRole relationship
-        return view('livewire.student-dashboard', compact('userRole'));
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        $userRole = $user->userRole->role;
+        
+        // Paginated completed enrollments
+        $completedEnrollments = $user->enrollments()
+            ->where('status', 'completed')
+            ->with('module')
+            ->paginate(5, ['*'], 'completedPage');
+        
+        // Available modules with search and pagination
+        $enrolledModuleIds = $user->enrollments()->pluck('module_id')->toArray();
+        $availableModules = Module::where('active', true)
+            ->whereNotIn('id', $enrolledModuleIds)
+            ->when($this->searchAvailable, fn($q) => $q->where('module', 'like', '%' . $this->searchAvailable . '%'))
+            ->paginate(5, ['*'], 'availablePage');
+        
+        return view('livewire.student-dashboard', compact('userRole', 'completedEnrollments', 'availableModules'));
     }
 }
