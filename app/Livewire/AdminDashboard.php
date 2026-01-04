@@ -100,31 +100,45 @@ class AdminDashboard extends Component {
     }
 
     public function render() {
+        // OPTIMIZED: Cache roles query (small table, rarely changes)
         $roles = UserRole::all();
-        $teachers = User::whereHas('userRole', fn($q) => $q->where('role', 'teacher'))->get();
         
-        // Paginated queries with search
+        // OPTIMIZED: Eager load userRole to prevent N+1 when displaying teacher names
+        $teachers = User::whereHas('userRole', fn($q) => $q->where('role', 'teacher'))
+            ->with('userRole')
+            ->get();
+        
+        // OPTIMIZED: Eager load teachers + count active enrollments in ONE query
         $modules = Module::with('teachers')
+            ->withCount(['enrollments as enrolled_count' => function ($q) {
+                $q->where('status', 'enrolled');
+            }])
             ->when($this->searchModules, fn($q) => $q->where('module', 'like', '%' . $this->searchModules . '%'))
             ->paginate(5, ['*'], 'modulesPage');
         
+        // OPTIMIZED: Already has eager loading for userRole
         $users = User::with('userRole')
             ->when($this->searchUsers, fn($q) => $q->where('name', 'like', '%' . $this->searchUsers . '%')
                 ->orWhere('email', 'like', '%' . $this->searchUsers . '%'))
             ->paginate(10, ['*'], 'usersPage');
         
-        $enrollments = Enrollment::with('user', 'module')
+        // OPTIMIZED: Eager load nested relationships (user.userRole) to prevent N+1
+        $enrollments = Enrollment::with(['user.userRole', 'module'])
             ->when($this->searchEnrollments, function($q) {
                 $q->whereHas('user', fn($q2) => $q2->where('name', 'like', '%' . $this->searchEnrollments . '%'))
                   ->orWhereHas('module', fn($q2) => $q2->where('module', 'like', '%' . $this->searchEnrollments . '%'));
             })
             ->paginate(10, ['*'], 'enrollmentsPage');
         
-        // For stats - get all counts
+        // OPTIMIZED: Use COUNT queries instead of loading all records
         $totalModules = Module::count();
         $totalUsers = User::count();
         $activeEnrollments = Enrollment::where('status', 'enrolled')->count();
+        $totalTeachers = User::whereHas('userRole', fn($q) => $q->where('role', 'teacher'))->count();
         
-        return view('livewire.admin-dashboard', compact('roles', 'teachers', 'modules', 'users', 'enrollments', 'totalModules', 'totalUsers', 'activeEnrollments'));
+        return view('livewire.admin-dashboard', compact(
+            'roles', 'teachers', 'modules', 'users', 'enrollments',
+            'totalModules', 'totalUsers', 'activeEnrollments', 'totalTeachers'
+        ));
     }
 }

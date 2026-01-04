@@ -22,7 +22,11 @@ class StudentDashboard extends Component
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
-        $this->enrollments = $user->enrollments()->where('status', 'enrolled')->get(); // Current enrollments
+        // OPTIMIZED: Eager load module to prevent N+1 when displaying enrollment list
+        $this->enrollments = $user->enrollments()
+            ->where('status', 'enrolled')
+            ->with('module')
+            ->get();
     }
 
     public function enroll($moduleId)
@@ -61,8 +65,11 @@ class StudentDashboard extends Component
             'status' => 'enrolled',
             'enrolled_at' => now(),
         ]);
-        // Refresh current enrollments
-        $this->enrollments = $user->enrollments()->where('status', 'enrolled')->get();
+        // OPTIMIZED: Refresh with eager loading
+        $this->enrollments = $user->enrollments()
+            ->where('status', 'enrolled')
+            ->with('module')
+            ->get();
         session()->flash('message', 'Enrolled successfully!');
     }
 
@@ -72,19 +79,29 @@ class StudentDashboard extends Component
         $user = Auth::user();
         $userRole = $user->userRole->role;
         
-        // Paginated completed enrollments
+        // OPTIMIZED: Eager load module relationship
         $completedEnrollments = $user->enrollments()
             ->where('status', 'completed')
             ->with('module')
             ->paginate(5, ['*'], 'completedPage');
         
-        // Available modules with search and pagination
+        // OPTIMIZED: Get enrolled IDs efficiently, then use withCount for enrollment stats
         $enrolledModuleIds = $user->enrollments()->pluck('module_id')->toArray();
         $availableModules = Module::where('active', true)
             ->whereNotIn('id', $enrolledModuleIds)
+            ->withCount(['enrollments as enrolled_count' => function ($q) {
+                $q->where('status', 'enrolled');
+            }])
             ->when($this->searchAvailable, fn($q) => $q->where('module', 'like', '%' . $this->searchAvailable . '%'))
             ->paginate(5, ['*'], 'availablePage');
         
-        return view('livewire.student-dashboard', compact('userRole', 'completedEnrollments', 'availableModules'));
+        // OPTIMIZED: Calculate stats with efficient count queries
+        $passCount = $user->enrollments()->where('grade', 'PASS')->count();
+        $completedCount = $user->enrollments()->where('status', 'completed')->count();
+        $passRate = $completedCount > 0 ? round(($passCount / $completedCount) * 100) : 0;
+        
+        return view('livewire.student-dashboard', compact(
+            'userRole', 'completedEnrollments', 'availableModules', 'passRate', 'completedCount'
+        ));
     }
 }
