@@ -95,7 +95,8 @@
                     </div>
                     <div class="mt-3">
                         <div class="w-full bg-slate-200 rounded-full h-2">
-                            <div class="bg-blue-600 h-2 rounded-full" style="width: {{ ($enrollments->count() / 4) * 100 }}%"></div>
+                            @php $progressWidth = ($enrollments->count() / 4) * 100; @endphp
+                            <div class="bg-blue-600 h-2 rounded-full" style="width: {{ $progressWidth }}%"></div>
                         </div>
                     </div>
                 </div>

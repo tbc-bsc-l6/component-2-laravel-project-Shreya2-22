@@ -176,12 +176,15 @@
                                 </td>
                                 <td class="px-6 py-4 text-sm text-slate-600">{{ $user->email }}</td>
                                 <td class="px-6 py-4">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium 
-                                        @if($user->userRole->role === 'admin') bg-red-100 text-red-700
-                                        @elseif($user->userRole->role === 'teacher') bg-purple-100 text-purple-700
-                                        @elseif($user->userRole->role === 'student') bg-blue-100 text-blue-700
-                                        @else bg-slate-100 text-slate-700
-                                        @endif">
+                                    @php
+                                        $roleClasses = match($user->userRole->role) {
+                                            'admin' => 'bg-red-100 text-red-700',
+                                            'teacher' => 'bg-purple-100 text-purple-700',
+                                            'student' => 'bg-blue-100 text-blue-700',
+                                            default => 'bg-slate-100 text-slate-700',
+                                        };
+                                    @endphp
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {{ $roleClasses }}">
                                         {{ ucfirst($user->userRole->role ?? 'N/A') }}
                                     </span>
                                 </td>
