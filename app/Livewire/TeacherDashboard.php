@@ -13,6 +13,12 @@ class TeacherDashboard extends Component
     use WithPagination;
 
     public $assignedModules, $selectedModule;
+    public $searchStudents = '';
+
+    public function updatedSearchStudents()
+    {
+        $this->resetPage('studentsPage');
+    }
 
     public function mount()
     {
@@ -42,10 +48,19 @@ class TeacherDashboard extends Component
         $studentsInModule = collect();
         
         if ($this->selectedModule) {
-            $studentsInModule = Enrollment::where('module_id', $this->selectedModule)
+            $query = Enrollment::where('module_id', $this->selectedModule)
                 ->where('status', 'enrolled')
-                ->with('user')
-                ->paginate(10, ['*'], 'studentsPage');
+                ->with('user');
+            
+            // Apply search filter
+            if ($this->searchStudents) {
+                $query->whereHas('user', function($q) {
+                    $q->where('name', 'like', '%' . $this->searchStudents . '%')
+                      ->orWhere('email', 'like', '%' . $this->searchStudents . '%');
+                });
+            }
+            
+            $studentsInModule = $query->paginate(10, ['*'], 'studentsPage');
         }
         
         return view('livewire.teacher-dashboard', compact('studentsInModule'));

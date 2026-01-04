@@ -107,7 +107,8 @@
                         <p class="text-slate-500 text-xs md:text-sm">Assign pass or fail grades to enrolled students</p>
                     </div>
                 </div>
-                <div>
+                <div class="flex flex-col md:flex-row gap-2 md:gap-3">
+                    <input wire:model.live.debounce.300ms="searchStudents" type="text" placeholder="Search students..." class="w-full md:w-64 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent">
                     <select wire:model.live="selectedModule" class="w-full md:w-auto border border-slate-300 rounded-lg md:rounded-xl px-3 md:px-4 py-2 md:py-2.5 text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent">
                         @foreach($assignedModules as $module)
                             <option value="{{ $module->id }}">{{ $module->module }}</option>
