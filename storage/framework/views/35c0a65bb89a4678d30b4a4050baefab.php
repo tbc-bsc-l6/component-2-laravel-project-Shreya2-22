@@ -30,14 +30,17 @@
                             <thead class="bg-gray-100">
                                 <tr>
                                     <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Module</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Enrolled At</th>
                                     <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Grade</th>
                                     <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Completed At</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Module Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $completedEnrollments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $enrollment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr class="border-t border-gray-200 hover:bg-gray-50">
                                         <td class="px-6 py-4 text-sm text-gray-900"><?php echo e($enrollment->module->module); ?></td>
+                                        <td class="px-6 py-4 text-sm text-gray-700"><?php echo e($enrollment->enrolled_at ? $enrollment->enrolled_at->format('Y-m-d') : 'N/A'); ?></td>
                                         <td class="px-6 py-4">
                                             <span class="px-3 py-1 rounded-full text-xs font-medium <?php echo e($enrollment->grade === 'PASS' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'); ?>">
                                                 <?php echo e($enrollment->grade ?? 'N/A'); ?>
@@ -45,6 +48,12 @@
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-700"><?php echo e($enrollment->completed_at ? $enrollment->completed_at->format('Y-m-d') : 'N/A'); ?></td>
+                                        <td class="px-6 py-4">
+                                            <span class="px-3 py-1 rounded-full text-xs font-medium <?php echo e($enrollment->module->active ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-600'); ?>">
+                                                <?php echo e($enrollment->module->active ? 'Active' : 'Archived'); ?>
+
+                                            </span>
+                                        </td>
                                     </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
                             </tbody>
@@ -69,13 +78,19 @@
                                 <tr>
                                     <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Module</th>
                                     <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Enrolled At</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $enrollments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $enrollment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr class="border-t border-gray-200 hover:bg-gray-50">
                                         <td class="px-6 py-4 text-sm text-gray-900"><?php echo e($enrollment->module->module); ?></td>
-                                        <td class="px-6 py-4 text-sm text-gray-700"><?php echo e($enrollment->enrolled_at->format('Y-m-d')); ?></td>
+                                        <td class="px-6 py-4 text-sm text-gray-700"><?php echo e($enrollment->enrolled_at ? $enrollment->enrolled_at->format('Y-m-d') : 'N/A'); ?></td>
+                                        <td class="px-6 py-4">
+                                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                In Progress
+                                            </span>
+                                        </td>
                                     </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
                             </tbody>
@@ -98,14 +113,17 @@
                             <thead class="bg-gray-100">
                                 <tr>
                                     <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Module</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Enrolled At</th>
                                     <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Grade</th>
                                     <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Completed At</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Module Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $completedEnrollments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $enrollment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <tr class="border-t border-gray-200 hover:bg-gray-50">
                                         <td class="px-6 py-4 text-sm text-gray-900"><?php echo e($enrollment->module->module); ?></td>
+                                        <td class="px-6 py-4 text-sm text-gray-700"><?php echo e($enrollment->enrolled_at ? $enrollment->enrolled_at->format('Y-m-d') : 'N/A'); ?></td>
                                         <td class="px-6 py-4">
                                             <span class="px-3 py-1 rounded-full text-xs font-medium <?php echo e($enrollment->grade === 'PASS' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'); ?>">
                                                 <?php echo e($enrollment->grade ?? 'N/A'); ?>
@@ -113,6 +131,12 @@
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-700"><?php echo e($enrollment->completed_at ? $enrollment->completed_at->format('Y-m-d') : 'N/A'); ?></td>
+                                        <td class="px-6 py-4">
+                                            <span class="px-3 py-1 rounded-full text-xs font-medium <?php echo e($enrollment->module->active ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-600'); ?>">
+                                                <?php echo e($enrollment->module->active ? 'Active' : 'Archived'); ?>
+
+                                            </span>
+                                        </td>
                                     </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
                             </tbody>
@@ -136,6 +160,7 @@
                                 <thead class="bg-gray-100">
                                     <tr>
                                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Module</th>
+                                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Available Spots</th>
                                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Action</th>
                                     </tr>
                                 </thead>
@@ -143,8 +168,11 @@
                                     <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $availableModules; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $module): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <tr class="border-t border-gray-200 hover:bg-gray-50">
                                             <td class="px-6 py-4 text-sm text-gray-900"><?php echo e($module->module); ?></td>
+                                            <td class="px-6 py-4 text-sm text-gray-700">
+                                                <?php echo e(10 - $module->enrollments()->where('status', 'enrolled')->count()); ?>/10
+                                            </td>
                                             <td class="px-6 py-4">
-                                                <button wire:click="enroll(<?php echo e($module->id); ?>)" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition">Enroll</button>
+                                                <button wire:click="enroll(<?php echo e($module->id); ?>)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Enroll</button>
                                             </td>
                                         </tr>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
