@@ -1,55 +1,77 @@
-<div class="min-h-screen bg-gray-50 p-6">
+<div class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
     <div class="max-w-7xl mx-auto">
-        <h1 class="text-4xl font-bold text-gray-900 mb-8 text-center">Student Dashboard</h1>
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold text-slate-800">Student Dashboard</h1>
+            <p class="text-slate-500 mt-2">Track your enrollments and academic progress</p>
+        </div>
 
         <!--[if BLOCK]><![endif]--><?php if(session('message')): ?>
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg mb-6 shadow-sm">
+            <div class="bg-emerald-50 border-l-4 border-emerald-500 text-emerald-700 px-6 py-4 rounded-r-xl mb-6 shadow-sm flex items-center">
+                <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
                 <?php echo e(session('message')); ?>
 
             </div>
         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
         <!--[if BLOCK]><![endif]--><?php if(session('error')): ?>
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-6 shadow-sm">
+            <div class="bg-red-50 border-l-4 border-red-500 text-red-700 px-6 py-4 rounded-r-xl mb-6 shadow-sm flex items-center">
+                <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
                 <?php echo e(session('error')); ?>
 
             </div>
         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
         <!--[if BLOCK]><![endif]--><?php if($userRole === 'old_student'): ?>
-            <!-- Old Students: Only show completed modules -->
-            <div class="bg-white shadow-xl rounded-xl p-8 border border-gray-200">
-                <h2 class="text-3xl font-semibold text-gray-800 mb-6 flex items-center">
-                    <svg class="w-8 h-8 mr-3 text-green-600" fill="currentColor" viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    Completed Modules History
-                </h2>
+            <!-- Old Student: Only Completed History -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <div class="flex items-center mb-6">
+                    <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center mr-4">
+                        <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">Completed Modules History</h2>
+                        <p class="text-slate-500 text-sm">Your academic record</p>
+                    </div>
+                </div>
+
                 <!--[if BLOCK]><![endif]--><?php if($completedEnrollments->isEmpty()): ?>
-                    <p class="text-gray-600">No completed modules yet.</p>
+                    <div class="text-center py-12 bg-slate-50 rounded-xl">
+                        <svg class="w-12 h-12 text-slate-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        <p class="text-slate-500">No completed modules in your history.</p>
+                    </div>
                 <?php else: ?>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm">
-                            <thead class="bg-gray-100">
+                    <div class="overflow-hidden rounded-xl border border-slate-200">
+                        <table class="min-w-full divide-y divide-slate-200">
+                            <thead class="bg-slate-50">
                                 <tr>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Module</th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Enrolled At</th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Grade</th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Completed At</th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Module Status</th>
+                                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Module</th>
+                                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Enrolled</th>
+                                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Grade</th>
+                                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Completed</th>
+                                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Status</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="bg-white divide-y divide-slate-200">
                                 <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $completedEnrollments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $enrollment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <tr class="border-t border-gray-200 hover:bg-gray-50">
-                                        <td class="px-6 py-4 text-sm text-gray-900"><?php echo e($enrollment->module->module); ?></td>
-                                        <td class="px-6 py-4 text-sm text-gray-700"><?php echo e($enrollment->enrolled_at ? $enrollment->enrolled_at->format('Y-m-d') : 'N/A'); ?></td>
+                                    <tr class="hover:bg-slate-50 transition">
                                         <td class="px-6 py-4">
-                                            <span class="px-3 py-1 rounded-full text-xs font-medium <?php echo e($enrollment->grade === 'PASS' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'); ?>">
+                                            <div class="flex items-center">
+                                                <div class="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center mr-3">
+                                                    <span class="text-indigo-600 font-bold text-sm"><?php echo e(substr($enrollment->module->module, 0, 1)); ?></span>
+                                                </div>
+                                                <span class="font-medium text-slate-800"><?php echo e($enrollment->module->module); ?></span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-slate-600"><?php echo e($enrollment->enrolled_at ? $enrollment->enrolled_at->format('M d, Y') : 'N/A'); ?></td>
+                                        <td class="px-6 py-4">
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold <?php echo e($enrollment->grade === 'PASS' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'); ?>">
                                                 <?php echo e($enrollment->grade ?? 'N/A'); ?>
 
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 text-sm text-gray-700"><?php echo e($enrollment->completed_at ? $enrollment->completed_at->format('Y-m-d') : 'N/A'); ?></td>
+                                        <td class="px-6 py-4 text-sm text-slate-600"><?php echo e($enrollment->completed_at ? $enrollment->completed_at->format('M d, Y') : 'N/A'); ?></td>
                                         <td class="px-6 py-4">
-                                            <span class="px-3 py-1 rounded-full text-xs font-medium <?php echo e($enrollment->module->active ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-600'); ?>">
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium <?php echo e($enrollment->module->active ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-600'); ?>">
                                                 <?php echo e($enrollment->module->active ? 'Active' : 'Archived'); ?>
 
                                             </span>
@@ -62,34 +84,150 @@
                 <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
             </div>
         <?php else: ?>
-            <!-- Current Students: Show enrollments, history, and available modules -->
+            <!-- Current Student Dashboard -->
+            <!-- Stats Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-slate-500 text-sm font-medium">Current Enrollments</p>
+                            <p class="text-3xl font-bold text-slate-800 mt-1"><?php echo e($enrollments->count()); ?>/4</p>
+                        </div>
+                        <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="w-full bg-slate-200 rounded-full h-2">
+                            <div class="bg-blue-600 h-2 rounded-full" style="width: <?php echo e(($enrollments->count() / 4) * 100); ?>%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-slate-500 text-sm font-medium">Completed Modules</p>
+                            <p class="text-3xl font-bold text-slate-800 mt-1"><?php echo e($completedEnrollments->count()); ?></p>
+                        </div>
+                        <div class="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-slate-500 text-sm font-medium">Pass Rate</p>
+                            <p class="text-3xl font-bold text-slate-800 mt-1">
+                                <!--[if BLOCK]><![endif]--><?php if($completedEnrollments->count() > 0): ?>
+                                    <?php echo e(round(($completedEnrollments->where('grade', 'PASS')->count() / $completedEnrollments->count()) * 100)); ?>%
+                                <?php else: ?>
+                                    N/A
+                                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                            </p>
+                        </div>
+                        <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Current Enrollments -->
-            <div class="bg-white shadow-xl rounded-xl p-8 mb-10 border border-gray-200">
-                <h2 class="text-3xl font-semibold text-gray-800 mb-6 flex items-center">
-                    <svg class="w-8 h-8 mr-3 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    My Current Enrollments (<?php echo e($enrollments->count()); ?>/4)
-                </h2>
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6">
+                <div class="flex items-center mb-6">
+                    <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center mr-4">
+                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">My Current Enrollments</h2>
+                        <p class="text-slate-500 text-sm">Modules you are currently enrolled in</p>
+                    </div>
+                </div>
+
                 <!--[if BLOCK]><![endif]--><?php if($enrollments->isEmpty()): ?>
-                    <p class="text-gray-600">No current enrollments.</p>
+                    <div class="text-center py-12 bg-slate-50 rounded-xl">
+                        <svg class="w-12 h-12 text-slate-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        <p class="text-slate-500">No current enrollments. Browse available modules below!</p>
+                    </div>
                 <?php else: ?>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm">
-                            <thead class="bg-gray-100">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $enrollments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $enrollment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <div class="border border-slate-200 rounded-xl p-5 bg-white hover:shadow-md transition">
+                                <div class="flex items-center mb-3">
+                                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                                        <span class="text-blue-600 font-bold"><?php echo e(substr($enrollment->module->module, 0, 1)); ?></span>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="font-semibold text-slate-800 text-sm"><?php echo e($enrollment->module->module); ?></h3>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700">
+                                        In Progress
+                                    </span>
+                                    <span class="text-xs text-slate-500"><?php echo e($enrollment->enrolled_at ? $enrollment->enrolled_at->format('M d, Y') : ''); ?></span>
+                                </div>
+                            </div>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
+                    </div>
+                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+            </div>
+
+            <!-- Available Modules -->
+            <!--[if BLOCK]><![endif]--><?php if($enrollments->count() < 4): ?>
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6">
+                <div class="flex items-center mb-6">
+                    <div class="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center mr-4">
+                        <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">Available Modules</h2>
+                        <p class="text-slate-500 text-sm">Enroll in new modules (<?php echo e(4 - $enrollments->count()); ?> slots available)</p>
+                    </div>
+                </div>
+
+                <!--[if BLOCK]><![endif]--><?php if($availableModules->isEmpty()): ?>
+                    <div class="text-center py-12 bg-slate-50 rounded-xl">
+                        <svg class="w-12 h-12 text-slate-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <p class="text-slate-500">No available modules to enroll in at the moment.</p>
+                    </div>
+                <?php else: ?>
+                    <div class="overflow-hidden rounded-xl border border-slate-200">
+                        <table class="min-w-full divide-y divide-slate-200">
+                            <thead class="bg-slate-50">
                                 <tr>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Module</th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Enrolled At</th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Status</th>
+                                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Module</th>
+                                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Available Spots</th>
+                                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $enrollments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $enrollment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <tr class="border-t border-gray-200 hover:bg-gray-50">
-                                        <td class="px-6 py-4 text-sm text-gray-900"><?php echo e($enrollment->module->module); ?></td>
-                                        <td class="px-6 py-4 text-sm text-gray-700"><?php echo e($enrollment->enrolled_at ? $enrollment->enrolled_at->format('Y-m-d') : 'N/A'); ?></td>
+                            <tbody class="bg-white divide-y divide-slate-200">
+                                <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $availableModules; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $module): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <?php $spots = 10 - $module->enrollments()->where('status', 'enrolled')->count(); ?>
+                                    <tr class="hover:bg-slate-50 transition">
                                         <td class="px-6 py-4">
-                                            <span class="px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                                In Progress
+                                            <div class="flex items-center">
+                                                <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center mr-3">
+                                                    <span class="text-purple-600 font-bold text-sm"><?php echo e(substr($module->module, 0, 1)); ?></span>
+                                                </div>
+                                                <span class="font-medium text-slate-800"><?php echo e($module->module); ?></span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium <?php echo e($spots > 5 ? 'bg-emerald-100 text-emerald-700' : ($spots > 0 ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700')); ?>">
+                                                <?php echo e($spots); ?>/10 spots
                                             </span>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <!--[if BLOCK]><![endif]--><?php if($spots > 0): ?>
+                                                <button wire:click="enroll(<?php echo e($module->id); ?>)" class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700 transition">
+                                                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                                                    Enroll
+                                                </button>
+                                            <?php else: ?>
+                                                <span class="text-slate-400 text-sm">Module Full</span>
+                                            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                                         </td>
                                     </tr>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
@@ -98,41 +236,63 @@
                     </div>
                 <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
             </div>
+            <?php else: ?>
+                <div class="bg-amber-50 border-l-4 border-amber-500 text-amber-700 px-6 py-4 rounded-r-xl mb-6 flex items-center">
+                    <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+                    You have reached the maximum enrollment limit of 4 modules.
+                </div>
+            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
-            <!-- Completed Modules History -->
-            <div class="bg-white shadow-xl rounded-xl p-8 mb-10 border border-gray-200">
-                <h2 class="text-3xl font-semibold text-gray-800 mb-6 flex items-center">
-                    <svg class="w-8 h-8 mr-3 text-green-600" fill="currentColor" viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    Completed Modules History
-                </h2>
+            <!-- Completed History -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <div class="flex items-center mb-6">
+                    <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center mr-4">
+                        <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800">Completed Modules</h2>
+                        <p class="text-slate-500 text-sm">Your academic history</p>
+                    </div>
+                </div>
+
                 <!--[if BLOCK]><![endif]--><?php if($completedEnrollments->isEmpty()): ?>
-                    <p class="text-gray-600">No completed modules yet.</p>
+                    <div class="text-center py-12 bg-slate-50 rounded-xl">
+                        <svg class="w-12 h-12 text-slate-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                        <p class="text-slate-500">No completed modules yet. Keep learning!</p>
+                    </div>
                 <?php else: ?>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm">
-                            <thead class="bg-gray-100">
+                    <div class="overflow-hidden rounded-xl border border-slate-200">
+                        <table class="min-w-full divide-y divide-slate-200">
+                            <thead class="bg-slate-50">
                                 <tr>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Module</th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Enrolled At</th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Grade</th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Completed At</th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Module Status</th>
+                                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Module</th>
+                                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Enrolled</th>
+                                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Grade</th>
+                                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Completed</th>
+                                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Status</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="bg-white divide-y divide-slate-200">
                                 <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $completedEnrollments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $enrollment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <tr class="border-t border-gray-200 hover:bg-gray-50">
-                                        <td class="px-6 py-4 text-sm text-gray-900"><?php echo e($enrollment->module->module); ?></td>
-                                        <td class="px-6 py-4 text-sm text-gray-700"><?php echo e($enrollment->enrolled_at ? $enrollment->enrolled_at->format('Y-m-d') : 'N/A'); ?></td>
+                                    <tr class="hover:bg-slate-50 transition">
                                         <td class="px-6 py-4">
-                                            <span class="px-3 py-1 rounded-full text-xs font-medium <?php echo e($enrollment->grade === 'PASS' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'); ?>">
+                                            <div class="flex items-center">
+                                                <div class="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center mr-3">
+                                                    <span class="text-emerald-600 font-bold text-sm"><?php echo e(substr($enrollment->module->module, 0, 1)); ?></span>
+                                                </div>
+                                                <span class="font-medium text-slate-800"><?php echo e($enrollment->module->module); ?></span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 text-sm text-slate-600"><?php echo e($enrollment->enrolled_at ? $enrollment->enrolled_at->format('M d, Y') : 'N/A'); ?></td>
+                                        <td class="px-6 py-4">
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold <?php echo e($enrollment->grade === 'PASS' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'); ?>">
                                                 <?php echo e($enrollment->grade ?? 'N/A'); ?>
 
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 text-sm text-gray-700"><?php echo e($enrollment->completed_at ? $enrollment->completed_at->format('Y-m-d') : 'N/A'); ?></td>
+                                        <td class="px-6 py-4 text-sm text-slate-600"><?php echo e($enrollment->completed_at ? $enrollment->completed_at->format('M d, Y') : 'N/A'); ?></td>
                                         <td class="px-6 py-4">
-                                            <span class="px-3 py-1 rounded-full text-xs font-medium <?php echo e($enrollment->module->active ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-600'); ?>">
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium <?php echo e($enrollment->module->active ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-600'); ?>">
                                                 <?php echo e($enrollment->module->active ? 'Active' : 'Archived'); ?>
 
                                             </span>
@@ -144,48 +304,7 @@
                     </div>
                 <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
             </div>
-
-            <!-- Available Modules to Enroll -->
-            <!--[if BLOCK]><![endif]--><?php if($enrollments->count() < 4): ?>
-                <div class="bg-white shadow-xl rounded-xl p-8 border border-gray-200">
-                    <h2 class="text-3xl font-semibold text-gray-800 mb-6 flex items-center">
-                        <svg class="w-8 h-8 mr-3 text-purple-600" fill="currentColor" viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        Available Modules to Enroll
-                    </h2>
-                    <!--[if BLOCK]><![endif]--><?php if($availableModules->isEmpty()): ?>
-                        <p class="text-gray-600">No available modules to enroll in.</p>
-                    <?php else: ?>
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full bg-white border border-gray-200 rounded-lg shadow-sm">
-                                <thead class="bg-gray-100">
-                                    <tr>
-                                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Module</th>
-                                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Available Spots</th>
-                                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $availableModules; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $module): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                        <tr class="border-t border-gray-200 hover:bg-gray-50">
-                                            <td class="px-6 py-4 text-sm text-gray-900"><?php echo e($module->module); ?></td>
-                                            <td class="px-6 py-4 text-sm text-gray-700">
-                                                <?php echo e(10 - $module->enrollments()->where('status', 'enrolled')->count()); ?>/10
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                <button wire:click="enroll(<?php echo e($module->id); ?>)" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Enroll</button>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
-                                </tbody>
-                            </table>
-                        </div>
-                    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-                </div>
-            <?php else: ?>
-                <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded-lg">
-                    You have reached the maximum enrollment limit of 4 modules.
-                </div>
-            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
     </div>
-</div><?php /**PATH C:\xampp\htdocs\component-2-laravel-project-Shreya2-22\resources\views/livewire/student-dashboard.blade.php ENDPATH**/ ?>
+</div>
+<?php /**PATH C:\xampp\htdocs\component-2-laravel-project-Shreya2-22\resources\views/livewire/student-dashboard.blade.php ENDPATH**/ ?>
